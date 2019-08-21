@@ -1,11 +1,22 @@
-<template>
-  <navbar></navbar>
+<template >
+  <div>
+    <pageheader></pageheader>
+    <router-view :key="$route.fullPath"></router-view>
+  </div>
 </template>
 
 <script lang="ts">
-import NavbarVue from "./components/Navbar.vue";
-import SidebarVue from "./components/Sidebar.vue";
-export default {
-  components: { sidebar: SidebarVue, navbar: NavbarVue }
-};
+import Vue from "vue";
+import PageHeader from "./components/PageHeader.vue";
+export default Vue.extend({
+  components: {
+    pageheader: PageHeader
+  }
+});
 </script>
+
+<style lang="scss">
+body {
+  background-color: #fafafa;
+}
+</style>
