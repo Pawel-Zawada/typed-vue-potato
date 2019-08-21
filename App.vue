@@ -1,21 +1,11 @@
 <template>
-    <div>
-        <h1>{{text}}</h1>
-        <button @click="save">hallo</button>
-    </div>
+  <navbar></navbar>
 </template>
 
 <script lang="ts">
+import NavbarVue from "./components/Navbar.vue";
+import SidebarVue from "./components/Sidebar.vue";
 export default {
-    data() {
-        return {
-            text: 'hallo'
-        }
-    },
-    methods: {
-        save() {
-            alert("saved");
-        }
-    }
-}
+  components: { sidebar: SidebarVue, navbar: NavbarVue }
+};
 </script>
