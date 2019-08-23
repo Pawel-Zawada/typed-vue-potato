@@ -12,13 +12,15 @@ export const getInvoices = async (): Promise<Invoice[]> => {
 };
 
 export const getInvoiceDocument = async (id: number): Promise<string> => {
-  const response: { data: DefaultResponse } = await axios({
+  const response = await axios({
     url: `${baseurl}/download/${id}`,
     method: 'GET',
     responseType: 'blob'
   });
 
-  return response.data.data;
+  console.log(response.data);
+
+  return response.data;
 };
 
 export const deleteInvoice = async (id: number): Promise<boolean> => {
