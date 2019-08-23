@@ -18,8 +18,6 @@ export const getInvoiceDocument = async (id: number): Promise<string> => {
     responseType: 'blob'
   });
 
-  console.log(response.data);
-
   return response.data;
 };
 
