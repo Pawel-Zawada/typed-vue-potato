@@ -32,6 +32,11 @@ export default Vue.extend({
             .includes(this.search.toLowerCase())
       );
     },
+    getTagType(status: StatusString) {
+      if (status === 'processed') return 'success';
+      if (status === 'pending') return '';
+      if (status === 'hold') return 'warning';
+    },
     handleEdit(invoice: Invoice) {
       this.submitting.push(invoice.id);
     },
@@ -43,11 +48,6 @@ export default Vue.extend({
 
       const file = await getInvoiceDocument(invoice.id);
       downloadBlob(file, invoice.file_name);
-
-      console.log(index);
-
-      console.log(`splicing on ${index}`);
-      console.log(this.downloading.splice(index, 1), this.downloading);
     }
   },
   async created(): Promise<void> {

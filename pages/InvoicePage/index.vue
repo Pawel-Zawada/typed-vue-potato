@@ -3,7 +3,11 @@
     <el-table-column prop="id" label="Factuur" width="180"></el-table-column>
     <el-table-column prop="maintenance.vehicle.license_plate" label="Car" width="180"></el-table-column>
     <el-table-column prop="maintenance.vehicle.user.email" label="User" width="180"></el-table-column>
-    <el-table-column prop="status" label="Status"></el-table-column>
+    <el-table-column prop="status" label="Status">
+      <template slot-scope="scope">
+        <el-tag :type="getTagType(scope.row.status)">{{scope.row.status}}</el-tag>
+      </template>
+    </el-table-column>
     <el-table-column align="right">
       <template slot="header" slot-scope="scope">
         <el-input v-model="search" size="mini" placeholder="Search by email..." />
