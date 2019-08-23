@@ -1,7 +1,7 @@
 <template>
-  <el-main class="main">
+  <el-main>
     <el-row type="flex" justify="center">
-      <el-col id="title">
+      <el-col class="title">
         <h1>Dashboard</h1>
       </el-col>
     </el-row>
@@ -22,7 +22,7 @@
 </template>
 
 <style lang="scss" scoped>
-#title {
+.title {
   width: fit-content;
   h1 {
     display: inline-block;

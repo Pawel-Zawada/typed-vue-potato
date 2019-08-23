@@ -1,19 +1,27 @@
-<template>
+<template class="container">
   <router-view :key="$route.fullPath"></router-view>
 </template>
-
-<script lang="ts">
-import Vue from "vue";
-import PageHeader from "./components/PageHeader.vue";
-export default Vue.extend({
-  components: {
-    pageheader: PageHeader
-  }
-});
-</script>
 
 <style lang="scss">
 body {
   background-color: #fafafa;
+}
+.container {
+  height: 100%;
+}
+</style>
+
+<style lang="scss">
+/* Allows the `v-loading` directive to be passed to buttons by fixing the spinner size and position. */
+.el-button {
+  .el-loading-mask .el-loading-spinner {
+    & {
+      margin-top: -10px;
+    }
+    .circular {
+      height: 20px;
+      width: 20px;
+    }
+  }
 }
 </style>
