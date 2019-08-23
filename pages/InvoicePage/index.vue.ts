@@ -44,10 +44,14 @@ export default Vue.extend({
       this.deleting.push(invoice.id);
     },
     async handleDownload(invoice: Invoice) {
-      const index = this.downloading.push(invoice.id) - 1;
+      this.downloading.push(invoice.id) - 1;
 
       const file = await getInvoiceDocument(invoice.id);
       downloadBlob(file, invoice.file_name);
+
+      const index = this.downloading.findIndex(id => id === invoice.id);
+      this.downloading.splice(index, 1);
+      console.log(index);
     }
   },
   async created(): Promise<void> {
