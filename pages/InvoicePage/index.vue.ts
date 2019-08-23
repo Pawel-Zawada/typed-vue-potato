@@ -37,9 +37,14 @@ export default Vue.extend({
       );
     },
     getTagType(status: StatusString) {
-      if (status === 'processed') return 'success';
-      if (status === 'pending') return '';
-      if (status === 'hold') return 'warning';
+      switch (status) {
+        case "processed":
+          return 'success';
+        case "pending":
+          return '';
+        case "hold":
+          return 'warning';
+      }
     },
     handleEdit(invoice: Invoice) {
       this.submitting.push(invoice.id);
