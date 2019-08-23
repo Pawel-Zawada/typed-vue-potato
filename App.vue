@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <pageheader/>
-    <router-view :key="$route.fullPath"></router-view>
-  </div>
+  <router-view :key="$route.fullPath"></router-view>
 </template>
 
 <script lang="ts">
