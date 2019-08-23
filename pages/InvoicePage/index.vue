@@ -1,26 +1,32 @@
 <template>
-  <el-table v-loading="loading" :data="searchFilter()" class="table">
+  <el-table v-loading="loading" :data="searchFilter()" empty-text="Nothing found" class="table">
     <el-table-column prop="id" label="Factuur" width="180"></el-table-column>
     <el-table-column prop="maintenance.vehicle.license_plate" label="Car" width="180"></el-table-column>
     <el-table-column prop="maintenance.vehicle.user.email" label="User" width="180"></el-table-column>
     <el-table-column prop="status" label="Status"></el-table-column>
     <el-table-column align="right">
-      <template slot="header">
+      <template slot="header" slot-scope="scope">
         <el-input v-model="search" size="mini" placeholder="Search by email..." />
       </template>
       <template slot-scope="scope">
         <el-button
+          v-loading="!!downloading.find(id => id === scope.row.id)"
+          :disabled="!!downloading.find(id => id === scope.row.id)"
+          size="mini"
+          @click="handleDownload(scope.row)"
+        >Download</el-button>
+        <el-button
           v-loading="!!submitting.find(id => id === scope.row.id)"
           :disabled="!!submitting.find(id => id === scope.row.id)"
           size="mini"
-          @click="handleEdit(scope.$index, scope.row)"
+          @click="handleEdit(scope.row)"
         >Edit</el-button>
         <el-button
           v-loading="!!deleting.find(id => id === scope.row.id)"
           :disabled="!!deleting.find(id => id === scope.row.id)"
           size="mini"
           type="danger"
-          @click="handleDelete(scope.$index, scope.row)"
+          @click="handleDelete(scope.row)"
         >Delete</el-button>
       </template>
     </el-table-column>

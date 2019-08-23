@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import { getInvoices } from '../../api/invoices';
+import { getInvoices, getInvoiceDocument } from '../../api/invoices';
+import downloadBlob from '../../helpers/downloadBlob';
 
 interface DataInterface {
   invoices: Invoice[];
@@ -7,6 +8,7 @@ interface DataInterface {
   loading: boolean;
   submitting: number[];
   deleting: number[];
+  downloading: number[];
 }
 
 export default Vue.extend({
@@ -16,7 +18,8 @@ export default Vue.extend({
       search: '',
       loading: true,
       submitting: [],
-      deleting: []
+      deleting: [],
+      downloading: []
     };
   },
   methods: {
@@ -29,16 +32,26 @@ export default Vue.extend({
             .includes(this.search.toLowerCase())
       );
     },
-    handleEdit(index: number, row: Invoice) {
-      this.submitting.push(row.id);
+    handleEdit(invoice: Invoice) {
+      this.submitting.push(invoice.id);
     },
-    handleDelete(index: number, row: Invoice) {
-      this.deleting.push(row.id);
+    handleDelete(invoice: Invoice) {
+      this.deleting.push(invoice.id);
+    },
+    async handleDownload(invoice: Invoice) {
+      const index = this.downloading.push(invoice.id) - 1;
+
+      const file = await getInvoiceDocument(invoice.id);
+      downloadBlob(file, invoice.file_name);
+
+      console.log(index);
+
+      console.log(`splicing on ${index}`);
+      console.log(this.downloading.splice(index, 1), this.downloading);
     }
   },
   async created(): Promise<void> {
-    const data = await getInvoices();
-    this.invoices = data;
+    this.invoices = await getInvoices();
     this.loading = false;
   }
 });
