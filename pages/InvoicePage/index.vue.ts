@@ -1,5 +1,9 @@
 import Vue from 'vue';
-import { getInvoices, getInvoiceDocument } from '../../api/invoices';
+import {
+  getInvoices,
+  getInvoiceDocument,
+  deleteInvoice
+} from '../../api/invoices';
 import downloadBlob from '../../helpers/downloadBlob';
 
 interface DataInterface {
@@ -40,8 +44,19 @@ export default Vue.extend({
     handleEdit(invoice: Invoice) {
       this.submitting.push(invoice.id);
     },
-    handleDelete(invoice: Invoice) {
+    async handleDelete(invoice: Invoice) {
       this.deleting.push(invoice.id);
+
+      const success = await deleteInvoice(invoice.id);
+      if (success) {
+        const invoiceIndex = this.invoices.findIndex(
+          _invoice => _invoice.id === invoice.id
+        );
+        this.invoices.splice(invoiceIndex, 1);
+      }
+
+      const index = this.deleting.findIndex(id => id === invoice.id);
+      this.deleting.splice(index, 1);
     },
     async handleDownload(invoice: Invoice) {
       this.downloading.push(invoice.id) - 1;
@@ -51,7 +66,6 @@ export default Vue.extend({
 
       const index = this.downloading.findIndex(id => id === invoice.id);
       this.downloading.splice(index, 1);
-      console.log(index);
     }
   },
   async created(): Promise<void> {

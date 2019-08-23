@@ -5,6 +5,12 @@ declare type DateString = string;
 
 declare type StatusString = 'pending' | 'processed' | 'hold';
 
+declare type DefaultResponse = {
+  data: any;
+  status: string;
+  links: string[];
+};
+
 declare type Invoice = {
   created: DateString;
   extension: string;
