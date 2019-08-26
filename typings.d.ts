@@ -5,10 +5,31 @@ declare type DateString = string;
 
 declare type StatusString = 'pending' | 'processed' | 'hold';
 
-declare type DefaultResponse = {
-  data: any;
+/**
+ * @param property Entity property which is to be sorted. Example: `Invoices.id`.
+ * @param direciton Order of sorting. Example: `ASC`.
+ */
+declare type DataTableSortParameter = {
+  property: string;
+  direction: string;
+};
+
+/**
+ * @param DataType Typeset of the retrieved data from the API. Example: `Invoice[]`.
+ * @param Paginated Boolean value whether the response will hold the `pagination` object.
+ */
+declare type DefaultResponse<DataType = any, Paginated = false> = {
+  data: DataType;
   status: string;
   links: string[];
+  pagination: Paginated extends true
+    ? {
+        count: number;
+        limit: number;
+        page: number;
+        pages: number;
+      }
+    : undefined;
 };
 
 declare type Invoice = {

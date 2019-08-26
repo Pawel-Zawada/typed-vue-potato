@@ -10,7 +10,7 @@ import routes from './routes';
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-    routes
+  routes
 });
 
 /**
@@ -25,7 +25,7 @@ Vue.use(ElementUI);
  * Mount Vue to the root node.
  */
 new Vue({
-    el: '#app',
-    router,
-    render: h => h(App)
+  el: '#app',
+  router,
+  render: h => h(App)
 });

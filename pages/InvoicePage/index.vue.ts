@@ -1,10 +1,13 @@
 import Vue from 'vue';
+
 import {
   getInvoices,
   getInvoiceDocument,
   deleteInvoice
 } from '../../api/invoices';
 import downloadBlob from '../../helpers/downloadBlob';
+
+import DataTable from '../../components/DataTable/index.vue';
 
 interface DataInterface {
   invoices: Invoice[];
@@ -13,9 +16,21 @@ interface DataInterface {
   submitting: number[];
   deleting: number[];
   downloading: number[];
+  columns: {
+    prop?: string;
+    getProp?: Function;
+    label?: string;
+    width?: string;
+    minWidth?: string;
+    sortable?: boolean;
+    fixed?: string;
+  }[];
 }
 
 export default Vue.extend({
+  components: {
+    DataTable
+  },
   data(): DataInterface {
     return {
       invoices: [],
@@ -23,10 +38,52 @@ export default Vue.extend({
       loading: true,
       submitting: [],
       deleting: [],
-      downloading: []
+      downloading: [],
+      columns: [
+        {
+          prop: 'id',
+          getProp: (row: Invoice): number => row.id,
+          label: 'ID',
+          minWidth: '80',
+          sortable: true
+        },
+        {
+          prop: 'email',
+          getProp: (row: Invoice): string => row.maintenance.vehicle.user.email,
+          label: 'Email',
+          minWidth: '100'
+        },
+        {
+          prop: 'status',
+          getProp: (row: Invoice): string => row.status,
+          label: 'Status',
+          minWidth: '100'
+        },
+        {
+          prop: 'created',
+          getProp: (row: Invoice): string => row.created,
+          label: 'Created at',
+          minWidth: '100',
+          sortable: true
+        },
+        {
+          fixed: 'right',
+          label: 'Operations'
+        }
+      ]
     };
   },
   methods: {
+    async getData({
+      page,
+      sortParams
+    }: {
+      page: number;
+      sortParams: DataTableSortParameter[];
+    }): Promise<{ data: Object; total: number }> {
+      const response = await getInvoices(page, sortParams);
+      return { total: response.pagination.pages, data: response.data };
+    },
     searchFilter(): Invoice[] {
       return this.invoices.filter(
         invoice =>
@@ -38,17 +95,19 @@ export default Vue.extend({
     },
     getTagType(status: StatusString) {
       switch (status) {
-        case "processed":
+        case 'processed':
           return 'success';
-        case "pending":
+        case 'pending':
           return '';
-        case "hold":
+        case 'hold':
           return 'warning';
       }
     },
+    // TODO: Implement editing form.
     handleEdit(invoice: Invoice) {
       this.submitting.push(invoice.id);
     },
+    // TODO: Remove the item from the table.
     async handleDelete(invoice: Invoice) {
       this.deleting.push(invoice.id);
 
@@ -72,9 +131,5 @@ export default Vue.extend({
       const index = this.downloading.findIndex(id => id === invoice.id);
       this.downloading.splice(index, 1);
     }
-  },
-  async created(): Promise<void> {
-    this.invoices = await getInvoices();
-    this.loading = false;
   }
 });

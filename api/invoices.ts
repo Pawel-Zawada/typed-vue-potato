@@ -2,13 +2,23 @@ import axios from 'axios';
 
 const baseurl = '/admin/api/invoices';
 
-export const getInvoices = async (): Promise<Invoice[]> => {
+const getVariables =
+  'include_relations=Maintenances,Maintenances.Vehicles,Maintenances.Vehicles.Users';
+
+export const getInvoices = async (
+  page: number,
+  sort?: DataTableSortParameter[]
+): Promise<DefaultResponse<Invoice[], true>> => {
+  const sortingString = '';
+  if (sort) {
+    sort.map(
+      ({ property, direction }) => `&sort=${property}&direction=${direction}`
+    );
+  }
   const response: {
-    data: DefaultResponse;
-  } = await axios.get(
-    `${baseurl}?include_relations=Maintenances,Maintenances.Vehicles,Maintenances.Vehicles.Users&sort=Invoices.id&direction=desc`
-  );
-  return response.data.data;
+    data: DefaultResponse<Invoice[], true>;
+  } = await axios.get(`${baseurl}?${getVariables}${sortingString}`);
+  return response.data;
 };
 
 export const getInvoiceDocument = async (id: number): Promise<string> => {
