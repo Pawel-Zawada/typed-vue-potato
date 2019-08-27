@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 
 interface DataInterface {
   tableData: [];
@@ -17,15 +17,14 @@ export default Vue.extend({
       default: () => []
     },
     getData: {
-      type: Function,
-      default: () => Promise.resolve([])
+      type: Function as PropType<GetDataFunction<any, true>>
     }
   },
   data(): DataInterface {
     return {
       tableData: [],
       page: 1,
-      total: 10,
+      total: 1,
       sortParams: [],
       loading: false
     };
@@ -39,16 +38,13 @@ export default Vue.extend({
     }
   },
   methods: {
-    async getTableData(page?: number) {
+    async getTableData(page: number) {
       this.loading = true;
-      const reqPage = page || this.page;
       try {
-        const response = await this.getData({
-          page: reqPage,
-          sortParams: this.sortParams
-        });
+        const response = await this.getData(page || this.page, this.sortParams);
         this.tableData = response.data;
-        this.total = response.total;
+
+        this.total = response.pagination.limit;
       } finally {
         this.loading = false;
       }
@@ -60,10 +56,10 @@ export default Vue.extend({
       } else {
         this.sortParams = [];
       }
-      this.getTableData();
+      this.getTableData(this.page);
     }
   },
   created() {
-    this.getTableData();
+    this.getTableData(this.page);
   }
 });

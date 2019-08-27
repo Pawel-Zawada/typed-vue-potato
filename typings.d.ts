@@ -5,6 +5,16 @@ declare type DateString = string;
 
 declare type StatusString = 'pending' | 'processed' | 'hold';
 
+declare type DataTableColumn = {
+  prop?: string;
+  getProp?: (row: any) => string | number;
+  label?: string;
+  width?: string;
+  minWidth?: string;
+  sortable?: boolean;
+  fixed?: string;
+};
+
 /**
  * @param property Entity property which is to be sorted. Example: `Invoices.id`.
  * @param direciton Order of sorting. Example: `ASC`.
@@ -31,6 +41,15 @@ declare type DefaultResponse<DataType = any, Paginated = false> = {
       }
     : undefined;
 };
+
+/**
+ * @description Abstract function type of data getter functions that serve data types like `Invoice`.
+ * @see DefaultResponse for parameter descriptions.
+ */
+declare type GetDataFunction<DataType = any, Paginated = false> = (
+  page: number,
+  sort?: DataTableSortParameter[]
+) => Promise<DefaultResponse<DataType, Paginated>>;
 
 declare type Invoice = {
   created: DateString;

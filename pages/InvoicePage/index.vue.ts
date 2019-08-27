@@ -16,15 +16,7 @@ interface DataInterface {
   submitting: number[];
   deleting: number[];
   downloading: number[];
-  columns: {
-    prop?: string;
-    getProp?: Function;
-    label?: string;
-    width?: string;
-    minWidth?: string;
-    sortable?: boolean;
-    fixed?: string;
-  }[];
+  columns: DataTableColumn[];
 }
 
 export default Vue.extend({
@@ -74,16 +66,7 @@ export default Vue.extend({
     };
   },
   methods: {
-    async getData({
-      page,
-      sortParams
-    }: {
-      page: number;
-      sortParams: DataTableSortParameter[];
-    }): Promise<{ data: Object; total: number }> {
-      const response = await getInvoices(page, sortParams);
-      return { total: response.pagination.pages, data: response.data };
-    },
+    getInvoices,
     searchFilter(): Invoice[] {
       return this.invoices.filter(
         invoice =>

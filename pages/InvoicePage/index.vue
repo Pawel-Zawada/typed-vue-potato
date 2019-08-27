@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <el-button @click="$refs.table.getTableData()">Refresh</el-button>
-    <data-table :get-data="getData" ref="table" :columns="columns">
+    <data-table :get-data="getInvoices" ref="table" :columns="columns">
       <div slot="status" slot-scope="{row}">
         <el-tag :type="getTagType(row.status)" close-transition>{{row.status}}</el-tag>
       </div>

@@ -5,10 +5,10 @@ const baseurl = '/admin/api/invoices';
 const getVariables =
   'include_relations=Maintenances,Maintenances.Vehicles,Maintenances.Vehicles.Users';
 
-export const getInvoices = async (
+export const getInvoices: GetDataFunction<Invoice[], true> = async (
   page: number,
   sort?: DataTableSortParameter[]
-): Promise<DefaultResponse<Invoice[], true>> => {
+) => {
   const sortingString = '';
   if (sort) {
     sort.map(
@@ -17,7 +17,9 @@ export const getInvoices = async (
   }
   const response: {
     data: DefaultResponse<Invoice[], true>;
-  } = await axios.get(`${baseurl}?${getVariables}${sortingString}`);
+  } = await axios.get(
+    `${baseurl}?${getVariables}${sortingString}&page=${page}`
+  );
   return response.data;
 };
 
