@@ -37,9 +37,13 @@ declare type DefaultResponse<DataType = any, Paginated = false> = {
   links: string[];
   pagination: Paginated extends true
     ? {
+        /** Total amount of items available. */
         count: number;
+        /** Maximum amount of items retrieved per request. */
         limit: number;
+        /** Which page out of all pages the request is on. */
         page: number;
+        /** Total amount of available pages, based on the `limit` property. */
         pages: number;
       }
     : undefined;

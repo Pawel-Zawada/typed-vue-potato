@@ -2,7 +2,12 @@ import Vue, { PropType } from 'vue';
 
 interface DataInterface {
   page: number;
+  /** Total item count */
   total: number;
+  /** Total page count. Set either total or page-count and pages will be displayed; if you need page-sizes, total is required */
+  pageCount: number;
+  /** Item count of each page */
+  pageSize: number;
   sortParams: { property: string; direction: string }[];
   loading: boolean;
 }
@@ -27,6 +32,8 @@ export default Vue.extend({
     return {
       page: 1,
       total: 1,
+      pageCount: 1,
+      pageSize: 1,
       sortParams: [],
       loading: false
     };
@@ -43,7 +50,12 @@ export default Vue.extend({
     async getTableData(page: number): Promise<void> {
       this.loading = true;
       try {
-        await this.getData(page || this.page, this.sortParams);
+        const response = await this.getData(page || this.page, this.sortParams);
+
+        this.total = response.pagination.count;
+        this.page = response.pagination.page;
+        this.pageCount = response.pagination.pages;
+        this.pageSize = response.pagination.limit;
       } finally {
         this.loading = false;
       }

@@ -21,6 +21,8 @@
       <el-pagination
         v-model="page"
         :total="total"
+        :page-count="pageCount"
+        :page-size="pageSize"
         @current-change="getTableData"
         layout="prev, pager, next"
       ></el-pagination>
@@ -28,7 +30,7 @@
   </div>
 </template>
 
-<script src="./index.vue.ts">
+<script src="./index.ts" lang="ts">
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

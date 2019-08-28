@@ -30,7 +30,7 @@
   </el-main>
 </template>
 
-<script src="./index.vue.ts" lang="ts"></script>
+<script src="./index.ts" lang="ts"></script>
 
 <style lang="scss" scoped>
 .table {
