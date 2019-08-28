@@ -79,7 +79,15 @@ declare type Maintenance = {
   status: StatusString;
   vehicle: Vehicle;
   vehicle_id: number;
+  total_price: number;
+  type: string;
+  odometer: number;
+  odometer_unit: OdometerUnit;
+  note: string;
+  date: DateString;
 };
+
+declare type OdometerUnit = 'km' | 'mi';
 
 declare type Vehicle = {
   brand: string;

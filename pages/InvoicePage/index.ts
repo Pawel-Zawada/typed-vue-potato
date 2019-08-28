@@ -16,6 +16,12 @@ interface DataInterface {
   deleting: number[];
   downloading: number[];
   columns: DataTableColumn[];
+  dialog: {
+    open: boolean;
+    data?: Invoice;
+  };
+  form: Partial<Maintenance>;
+  odometerOptions: { label: string; value: OdometerUnit }[];
 }
 
 export default Vue.extend({
@@ -34,29 +40,43 @@ export default Vue.extend({
           prop: 'id',
           getProp: (row: Invoice): number => row.id,
           label: 'ID',
-          minWidth: '80'
+          minWidth: '20'
         },
         {
           prop: 'email',
           getProp: (row: Invoice): string => row.maintenance.vehicle.user.email,
-          label: 'Email',
-          minWidth: '100'
+          label: 'Email'
         },
         {
           prop: 'status',
           getProp: (row: Invoice): string => row.status,
-          label: 'Status',
-          minWidth: '100'
+          label: 'Status'
         },
         {
           prop: 'created',
           getProp: (row: Invoice): string => row.created,
-          label: 'Created at',
-          minWidth: '100'
+          label: 'Created at'
         },
         {
           fixed: 'right',
-          label: 'Operations'
+          label: 'Operations',
+          minWidth: '100'
+        }
+      ],
+
+      form: {},
+      dialog: {
+        open: false,
+        data: undefined
+      },
+      odometerOptions: [
+        {
+          label: 'Kilometers',
+          value: 'km'
+        },
+        {
+          label: 'Miles',
+          value: 'mi'
         }
       ]
     };
@@ -91,6 +111,14 @@ export default Vue.extend({
     // TODO: Implement editing form.
     handleEdit(invoice: Invoice) {
       this.editing.push(invoice.id);
+
+      this.dialog = {
+        open: true,
+        data: invoice
+      };
+      this.form = invoice.maintenance;
+
+      console.log(this.dialog, this.form);
     },
     async handleDelete(invoice: Invoice) {
       this.deleting.push(invoice.id);
@@ -114,6 +142,14 @@ export default Vue.extend({
 
       const index = this.downloading.findIndex(id => id === invoice.id);
       this.downloading.splice(index, 1);
+    },
+    // https://gist.github.com/SonyaMoisset/aa79f51d78b39639430661c03d9b1058#file-title-case-a-sentence-for-loop-wc-js
+    toTitleCase(str: any) {
+      str = str.toLowerCase().split(' ');
+      for (var i = 0; i < str.length; i++) {
+        str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+      }
+      return str.join(' ');
     }
   }
 });

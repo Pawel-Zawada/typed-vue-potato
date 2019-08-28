@@ -17,7 +17,7 @@
           :disabled="!!editing.find(id => id === row.id)"
           size="mini"
           @click="handleEdit(row)"
-        >Edit</el-button>
+        >Convert to maintenance</el-button>
         <el-button
           v-loading="!!deleting.find(id => id === row.id)"
           :disabled="!!deleting.find(id => id === row.id)"
@@ -27,6 +27,44 @@
         >Delete</el-button>
       </div>
     </data-table>
+    <el-dialog
+      v-if="dialog"
+      :title="`Convert to maintenance data${ dialog.data && `: Invoice #${dialog.data.id}` }`"
+      :visible.sync="dialog.open"
+    >
+      <el-form :model="form" label-width="120px">
+        <el-form-item label="Odometer">
+          <el-input-number v-model="form.odometer"></el-input-number>
+        </el-form-item>
+
+        <el-form-item label="Odometer unit">
+          <el-select v-model="form.odometer_unit" placeholder="Select">
+            <el-option
+              v-for="item in odometerOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-col :span="12">
+          <el-form-item label="Note">
+            <el-input
+              type="textarea"
+              autosize
+              placeholder="Anything that needs to be noted?"
+              v-model="form.note"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialog = false">Cancel</el-button>
+        <el-button type="primary" @click="dialog = false">Confirm</el-button>
+      </span>
+    </el-dialog>
   </el-main>
 </template>
 
