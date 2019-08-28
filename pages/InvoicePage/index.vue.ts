@@ -92,7 +92,6 @@ export default Vue.extend({
     handleEdit(invoice: Invoice) {
       this.editing.push(invoice.id);
     },
-    // TODO: Remove the item from the table.
     async handleDelete(invoice: Invoice) {
       this.deleting.push(invoice.id);
 

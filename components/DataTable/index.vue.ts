@@ -1,7 +1,6 @@
 import Vue, { PropType } from 'vue';
 
 interface DataInterface {
-  data: [];
   page: number;
   total: number;
   sortParams: { property: string; direction: string }[];
@@ -17,7 +16,8 @@ export default Vue.extend({
       default: () => []
     },
     data: {
-      type: []
+      type: Array,
+      default: []
     },
     getData: {
       type: Function as PropType<GetDataFunction<any, true>>
@@ -25,7 +25,6 @@ export default Vue.extend({
   },
   data(): DataInterface {
     return {
-      data: [],
       page: 1,
       total: 1,
       sortParams: [],

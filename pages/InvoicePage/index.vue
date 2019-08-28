@@ -13,8 +13,8 @@
           @click="handleDownload(row)"
         >Download</el-button>
         <el-button
-          v-loading="!!submitting.find(id => id === row.id)"
-          :disabled="!!submitting.find(id => id === row.id)"
+          v-loading="!!editing.find(id => id === row.id)"
+          :disabled="!!editing.find(id => id === row.id)"
           size="mini"
           @click="handleEdit(row)"
         >Edit</el-button>
