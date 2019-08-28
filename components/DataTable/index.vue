@@ -1,12 +1,6 @@
 <template>
   <div>
-    <el-table
-      v-loading="loading"
-      :data="tableData"
-      v-bind="$attrs"
-      v-on="listeners"
-      style="width: 100%"
-    >
+    <el-table v-loading="loading" :data="data" v-bind="$attrs" v-on="listeners" style="width: 100%">
       <slot name="columns">
         <el-table-column
           :sortable="column.sortable ? 'custom' : false"

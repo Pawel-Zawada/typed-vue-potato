@@ -5,6 +5,9 @@ declare type DateString = string;
 
 declare type StatusString = 'pending' | 'processed' | 'hold';
 
+/**
+ * @property {function} getProp Passes the row data so you can retrieve any containing value that you need, and return it for the template to render.
+ */
 declare type DataTableColumn = {
   prop?: string;
   getProp?: (row: any) => string | number;
@@ -17,7 +20,7 @@ declare type DataTableColumn = {
 
 /**
  * @param property Entity property which is to be sorted. Example: `Invoices.id`.
- * @param direciton Order of sorting. Example: `ASC`.
+ * @param direction Order of sorting. Example: `ASC`.
  */
 declare type DataTableSortParameter = {
   property: string;
@@ -50,6 +53,8 @@ declare type GetDataFunction<DataType = any, Paginated = false> = (
   page: number,
   sort?: DataTableSortParameter[]
 ) => Promise<DefaultResponse<DataType, Paginated>>;
+
+declare type RemoveDataFunction = (id: number) => Promise<boolean>;
 
 declare type Invoice = {
   created: DateString;

@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <el-button @click="$refs.table.getTableData()">Refresh</el-button>
-    <data-table :get-data="getInvoices" ref="table" :columns="columns">
+    <data-table :get-data="getInvoices" :data="invoices" ref="table" :columns="columns">
       <div slot="status" slot-scope="{row}">
         <el-tag :type="getTagType(row.status)" close-transition>{{row.status}}</el-tag>
       </div>
@@ -33,9 +33,6 @@
 <script src="./index.vue.ts" lang="ts"></script>
 
 <style lang="scss" scoped>
-body {
-  margin: 0;
-}
 .table {
   width: 100%;
   height: 100%;

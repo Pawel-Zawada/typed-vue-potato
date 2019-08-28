@@ -3,7 +3,7 @@ import Vue from 'vue';
 import {
   getInvoices,
   getInvoiceDocument,
-  deleteInvoice
+  removeInvoice
 } from '../../api/invoices';
 import downloadBlob from '../../helpers/downloadBlob';
 
@@ -12,8 +12,7 @@ import DataTable from '../../components/DataTable/index.vue';
 interface DataInterface {
   invoices: Invoice[];
   search: string;
-  loading: boolean;
-  submitting: number[];
+  editing: number[];
   deleting: number[];
   downloading: number[];
   columns: DataTableColumn[];
@@ -27,8 +26,7 @@ export default Vue.extend({
     return {
       invoices: [],
       search: '',
-      loading: true,
-      submitting: [],
+      editing: [],
       deleting: [],
       downloading: [],
       columns: [
@@ -36,8 +34,7 @@ export default Vue.extend({
           prop: 'id',
           getProp: (row: Invoice): number => row.id,
           label: 'ID',
-          minWidth: '80',
-          sortable: true
+          minWidth: '80'
         },
         {
           prop: 'email',
@@ -55,8 +52,7 @@ export default Vue.extend({
           prop: 'created',
           getProp: (row: Invoice): string => row.created,
           label: 'Created at',
-          minWidth: '100',
-          sortable: true
+          minWidth: '100'
         },
         {
           fixed: 'right',
@@ -66,7 +62,13 @@ export default Vue.extend({
     };
   },
   methods: {
-    getInvoices,
+    async getInvoices(page: number, sort: DataTableSortParameter[]) {
+      const response = await getInvoices(page, sort);
+
+      this.invoices = response.data;
+
+      return response;
+    },
     searchFilter(): Invoice[] {
       return this.invoices.filter(
         invoice =>
@@ -88,13 +90,13 @@ export default Vue.extend({
     },
     // TODO: Implement editing form.
     handleEdit(invoice: Invoice) {
-      this.submitting.push(invoice.id);
+      this.editing.push(invoice.id);
     },
     // TODO: Remove the item from the table.
     async handleDelete(invoice: Invoice) {
       this.deleting.push(invoice.id);
 
-      const success = await deleteInvoice(invoice.id);
+      const success = await removeInvoice(invoice.id);
       if (success) {
         const invoiceIndex = this.invoices.findIndex(
           _invoice => _invoice.id === invoice.id

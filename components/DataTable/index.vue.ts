@@ -1,7 +1,7 @@
 import Vue, { PropType } from 'vue';
 
 interface DataInterface {
-  tableData: [];
+  data: [];
   page: number;
   total: number;
   sortParams: { property: string; direction: string }[];
@@ -16,13 +16,16 @@ export default Vue.extend({
       type: Array,
       default: () => []
     },
+    data: {
+      type: []
+    },
     getData: {
       type: Function as PropType<GetDataFunction<any, true>>
     }
   },
   data(): DataInterface {
     return {
-      tableData: [],
+      data: [],
       page: 1,
       total: 1,
       sortParams: [],
@@ -38,13 +41,10 @@ export default Vue.extend({
     }
   },
   methods: {
-    async getTableData(page: number) {
+    async getTableData(page: number): Promise<void> {
       this.loading = true;
       try {
-        const response = await this.getData(page || this.page, this.sortParams);
-        this.tableData = response.data;
-
-        this.total = response.pagination.limit;
+        await this.getData(page || this.page, this.sortParams);
       } finally {
         this.loading = false;
       }

@@ -33,7 +33,7 @@ export const getInvoiceDocument = async (id: number): Promise<string> => {
   return response.data;
 };
 
-export const deleteInvoice = async (id: number): Promise<boolean> => {
+export const removeInvoice: RemoveDataFunction = async (id: number) => {
   const response: {
     data: DefaultResponse;
   } = await axios.delete(`${baseurl}/${id}`);
