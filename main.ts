@@ -18,8 +18,9 @@ const router = new VueRouter({
  */
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import locale from 'element-ui/lib/locale/lang/en.js';
 
-Vue.use(ElementUI);
+Vue.use(ElementUI, { locale });
 
 /**
  * Mount Vue to the root node.

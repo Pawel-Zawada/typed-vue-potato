@@ -25,7 +25,7 @@ export default Vue.extend({
       default: []
     },
     getData: {
-      type: Function as PropType<GetDataFunction<any, true>>
+      type: Function as PropType<API.GetDataFunction<any, true>>
     }
   },
   data(): DataInterface {

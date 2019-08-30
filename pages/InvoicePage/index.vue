@@ -12,12 +12,7 @@
           size="mini"
           @click="handleDownload(row)"
         >Download</el-button>
-        <el-button
-          v-loading="!!editing.find(id => id === row.id)"
-          :disabled="!!editing.find(id => id === row.id)"
-          size="mini"
-          @click="handleEdit(row)"
-        >Convert to maintenance</el-button>
+        <el-button size="mini" @click="handleEdit(row)">Maintenance data</el-button>
         <el-button
           v-loading="!!deleting.find(id => id === row.id)"
           :disabled="!!deleting.find(id => id === row.id)"
@@ -32,7 +27,7 @@
       :title="`Convert to maintenance data${ dialog.data && `: Invoice #${dialog.data.id}` }`"
       :visible.sync="dialog.open"
     >
-      <el-form :model="form" label-width="120px">
+      <el-form ref="invoiceForm" :model="form" label-width="120px">
         <el-form-item label="Odometer">
           <el-input-number v-model="form.odometer"></el-input-number>
         </el-form-item>
@@ -41,6 +36,17 @@
           <el-select v-model="form.odometer_unit" placeholder="Select">
             <el-option
               v-for="item in odometerOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="Status">
+          <el-select v-model="form.status" placeholder="Status">
+            <el-option
+              v-for="item in statusOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -59,10 +65,15 @@
             ></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="24">
+          <el-form-item label="Date">
+            <el-date-picker v-model="form.date" type="date" placeholder="Date of invoice"></el-date-picker>
+          </el-form-item>
+        </el-col>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialog = false">Cancel</el-button>
-        <el-button type="primary" @click="dialog = false">Confirm</el-button>
+        <el-button @click="() => { resetForm()}">Cancel</el-button>
+        <el-button type="primary" @click="submitForm()">Confirm</el-button>
       </span>
     </el-dialog>
   </el-main>

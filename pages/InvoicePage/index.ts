@@ -8,20 +8,26 @@ import {
 import downloadBlob from '../../helpers/downloadBlob';
 
 import DataTable from '../../components/DataTable/index.vue';
+import { updateMaintenance } from '../../api/maintenances';
 
 interface DataInterface {
-  invoices: Invoice[];
+  invoices: Entities.Invoice[];
   search: string;
   editing: number[];
   deleting: number[];
   downloading: number[];
-  columns: DataTableColumn[];
+  columns: DataTable.Column[];
   dialog: {
     open: boolean;
-    data?: Invoice;
+    data?: Entities.Invoice;
   };
-  form: Partial<Maintenance>;
+  form: Partial<Entities.Maintenance<false>>;
   odometerOptions: { label: string; value: OdometerUnit }[];
+  statusOptions: { label: string; value: StatusString }[];
+  $refs?: {
+    invoiceForm: Vue & Element.Form;
+    table: any;
+  };
 }
 
 export default Vue.extend({
@@ -38,23 +44,24 @@ export default Vue.extend({
       columns: [
         {
           prop: 'id',
-          getProp: (row: Invoice): number => row.id,
+          getProp: (row: Entities.Invoice): number => row.id,
           label: 'ID',
           minWidth: '20'
         },
         {
           prop: 'email',
-          getProp: (row: Invoice): string => row.maintenance.vehicle.user.email,
+          getProp: (row: Entities.Invoice): string =>
+            row.maintenance.vehicle.user.email,
           label: 'Email'
         },
         {
           prop: 'status',
-          getProp: (row: Invoice): string => row.status,
+          getProp: (row: Entities.Invoice): string => row.status,
           label: 'Status'
         },
         {
           prop: 'created',
-          getProp: (row: Invoice): string => row.created,
+          getProp: (row: Entities.Invoice): string => row.created,
           label: 'Created at'
         },
         {
@@ -78,18 +85,32 @@ export default Vue.extend({
           label: 'Miles',
           value: 'mi'
         }
+      ],
+      statusOptions: [
+        {
+          label: 'Pending',
+          value: 'pending'
+        },
+        {
+          label: 'Processed',
+          value: 'processed'
+        },
+        {
+          label: 'Hold',
+          value: 'hold'
+        }
       ]
     };
   },
   methods: {
-    async getInvoices(page: number, sort: DataTableSortParameter[]) {
+    async getInvoices(page: number, sort: DataTable.SortParameter[]) {
       const response = await getInvoices(page, sort);
 
       this.invoices = response.data;
 
       return response;
     },
-    searchFilter(): Invoice[] {
+    searchFilter(): Entities.Invoice[] {
       return this.invoices.filter(
         invoice =>
           !this.search ||
@@ -109,18 +130,16 @@ export default Vue.extend({
       }
     },
     // TODO: Implement editing form.
-    handleEdit(invoice: Invoice) {
+    handleEdit(invoice: Entities.Invoice) {
       this.editing.push(invoice.id);
 
       this.dialog = {
         open: true,
         data: invoice
       };
-      this.form = invoice.maintenance;
-
-      console.log(this.dialog, this.form);
+      this.form = { ...invoice.maintenance, vehicle: undefined };
     },
-    async handleDelete(invoice: Invoice) {
+    async handleDelete(invoice: Entities.Invoice) {
       this.deleting.push(invoice.id);
 
       const success = await removeInvoice(invoice.id);
@@ -134,7 +153,7 @@ export default Vue.extend({
       const index = this.deleting.findIndex(id => id === invoice.id);
       this.deleting.splice(index, 1);
     },
-    async handleDownload(invoice: Invoice) {
+    async handleDownload(invoice: Entities.Invoice) {
       this.downloading.push(invoice.id) - 1;
 
       const file = await getInvoiceDocument(invoice.id);
@@ -143,13 +162,49 @@ export default Vue.extend({
       const index = this.downloading.findIndex(id => id === invoice.id);
       this.downloading.splice(index, 1);
     },
-    // https://gist.github.com/SonyaMoisset/aa79f51d78b39639430661c03d9b1058#file-title-case-a-sentence-for-loop-wc-js
-    toTitleCase(str: any) {
-      str = str.toLowerCase().split(' ');
-      for (var i = 0; i < str.length; i++) {
-        str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+    async submitForm() {
+      this.$refs.invoiceForm.validate(async valid => {
+        if (valid && this.form.id) {
+          try {
+            const response = await updateMaintenance(this.form.id, {
+              ...this.form,
+              vehicle: undefined
+            });
+
+            if (response.status === 'success') {
+              this.cleanup();
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          alert('error submit!!');
+          return false;
+        }
+      });
+    },
+    resetForm() {
+      this.cleanup();
+    },
+    resetEditing() {
+      const invoice = this.invoices.find(
+        invoice => invoice.maintenance_id === this.form.id
+      );
+      if (invoice) {
+        const editingIndex = this.editing.findIndex(
+          invoiceId => invoiceId === invoice.id
+        );
+        this.editing.splice(editingIndex, 1);
       }
-      return str.join(' ');
+    },
+    cleanup() {
+      this.$refs.table.getTableData();
+      this.resetEditing();
+      this.form = {};
+      this.dialog = {
+        open: false,
+        data: undefined
+      };
     }
   }
 });

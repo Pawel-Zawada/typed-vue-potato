@@ -5,10 +5,10 @@ const baseurl = '/admin/api/invoices';
 const getVariables =
   'include_relations=Maintenances,Maintenances.Vehicles,Maintenances.Vehicles.Users';
 
-export const getInvoices: GetDataFunction<Invoice[], true> = async (
-  page: number,
-  sort?: DataTableSortParameter[]
-) => {
+export const getInvoices: API.GetDataFunction<
+  Entities.Invoice[],
+  true
+> = async (page: number, sort?: DataTable.SortParameter[]) => {
   const sortingString = '';
   if (sort) {
     sort.map(
@@ -16,7 +16,7 @@ export const getInvoices: GetDataFunction<Invoice[], true> = async (
     );
   }
   const response: {
-    data: DefaultResponse<Invoice[], true>;
+    data: API.DefaultResponse<Entities.Invoice[], true>;
   } = await axios.get(
     `${baseurl}?${getVariables}${sortingString}&page=${page}`
   );
@@ -33,9 +33,9 @@ export const getInvoiceDocument = async (id: number): Promise<string> => {
   return response.data;
 };
 
-export const removeInvoice: RemoveDataFunction = async (id: number) => {
+export const removeInvoice: API.RemoveDataFunction = async (id: number) => {
   const response: {
-    data: DefaultResponse;
+    data: API.DefaultResponse;
   } = await axios.delete(`${baseurl}/${id}`);
 
   return response.data.data;
