@@ -96,6 +96,13 @@ declare namespace Entities {
     status: StatusString;
   };
 
+  type Categories<Relations = true> = {
+    id: number;
+    name: string;
+    created: DateString;
+    modified: DateString;
+  };
+
   type Maintenance<Relations = true> = {
     created: string;
     garage_id: number;
@@ -110,6 +117,15 @@ declare namespace Entities {
     odometer_unit: OdometerUnit;
     note: string;
     date: DateString;
+  };
+
+  type MaintenanceLine<Relations = true> = {
+    created: string;
+    id: number;
+    modified: string;
+    name: string;
+    category_id: number;
+    maintenance_id: number;
   };
 
   type Vehicle<Relations = true> = {
