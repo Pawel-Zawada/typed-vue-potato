@@ -22,8 +22,6 @@ interface DataInterface {
     data?: Entities.Invoice;
   };
   form: Partial<Entities.Maintenance<false>>;
-  odometerOptions: { label: string; value: OdometerUnit }[];
-  statusOptions: { label: string; value: StatusString }[];
   $refs?: {
     invoiceForm: Vue & Element.Form;
     table: any;
@@ -75,31 +73,7 @@ export default Vue.extend({
       dialog: {
         open: false,
         data: undefined
-      },
-      odometerOptions: [
-        {
-          label: 'Kilometers',
-          value: 'km'
-        },
-        {
-          label: 'Miles',
-          value: 'mi'
-        }
-      ],
-      statusOptions: [
-        {
-          label: 'Pending',
-          value: 'pending'
-        },
-        {
-          label: 'Processed',
-          value: 'processed'
-        },
-        {
-          label: 'Hold',
-          value: 'hold'
-        }
-      ]
+      }
     };
   },
   methods: {
@@ -110,15 +84,6 @@ export default Vue.extend({
 
       return response;
     },
-    searchFilter(): Entities.Invoice[] {
-      return this.invoices.filter(
-        invoice =>
-          !this.search ||
-          invoice.maintenance.vehicle.user.email
-            .toLowerCase()
-            .includes(this.search.toLowerCase())
-      );
-    },
     getTagType(status: StatusString) {
       switch (status) {
         case 'processed':
@@ -128,16 +93,6 @@ export default Vue.extend({
         case 'hold':
           return 'warning';
       }
-    },
-    // TODO: Implement editing form.
-    handleEdit(invoice: Entities.Invoice) {
-      this.editing.push(invoice.id);
-
-      this.dialog = {
-        open: true,
-        data: invoice
-      };
-      this.form = { ...invoice.maintenance, vehicle: undefined };
     },
     async handleDelete(invoice: Entities.Invoice) {
       this.deleting.push(invoice.id);
@@ -161,50 +116,6 @@ export default Vue.extend({
 
       const index = this.downloading.findIndex(id => id === invoice.id);
       this.downloading.splice(index, 1);
-    },
-    async submitForm() {
-      this.$refs.invoiceForm.validate(async valid => {
-        if (valid && this.form.id) {
-          try {
-            const response = await updateMaintenance(this.form.id, {
-              ...this.form,
-              vehicle: undefined
-            });
-
-            if (response.status === 'success') {
-              this.cleanup();
-            }
-          } catch (error) {
-            console.log(error);
-          }
-        } else {
-          alert('error submit!!');
-          return false;
-        }
-      });
-    },
-    resetForm() {
-      this.cleanup();
-    },
-    resetEditing() {
-      const invoice = this.invoices.find(
-        invoice => invoice.maintenance_id === this.form.id
-      );
-      if (invoice) {
-        const editingIndex = this.editing.findIndex(
-          invoiceId => invoiceId === invoice.id
-        );
-        this.editing.splice(editingIndex, 1);
-      }
-    },
-    cleanup() {
-      this.$refs.table.getTableData();
-      this.resetEditing();
-      this.form = {};
-      this.dialog = {
-        open: false,
-        data: undefined
-      };
     }
   }
 });

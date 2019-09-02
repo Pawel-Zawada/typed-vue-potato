@@ -3,9 +3,9 @@ import axios from 'axios';
 const baseurl = '/admin/api/maintenances';
 
 export const updateMaintenance: API.UpdateDataFunction<
-  Partial<Entities.Maintenance<false>>,
+  Partial<Entities.Maintenance>,
   boolean
-  > = async (id, data) => {
+> = async (id, data) => {
   const response: {
     data: API.DefaultResponse<boolean>;
   } = await axios.put(`${baseurl}/${id}`, data);

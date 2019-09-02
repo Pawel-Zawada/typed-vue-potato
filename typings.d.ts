@@ -67,9 +67,17 @@ declare namespace API {
    * @see DefaultResponse for parameter descriptions.
    */
   type GetDataFunction<ResponseType = any, Paginated = false> = (
-    page: number,
+    page?: number,
     sort?: DataTable.SortParameter[]
   ) => Promise<DefaultResponse<ResponseType, Paginated>>;
+
+  /**
+   * @description Abstract functon type of specific entity data getter by ID that serves the information of a singular entity.
+   * @see DefaultResponse for parameter descriptions.
+   */
+  type GetByIdFunction<ResponseType = any> = (
+    id: number | string
+  ) => Promise<DefaultResponse<ResponseType>>;
 
   /**
    * @description Abstract function type of data update functions that update data types like `Invoice`.
@@ -82,6 +90,10 @@ declare namespace API {
   ) => Promise<DefaultResponse<ResponseType>>;
 
   type RemoveDataFunction = (id: number) => Promise<boolean>;
+
+  type CreateDataFunction<DataType = any, ResponseType = any> = (
+    data: DataType
+  ) => Promise<DefaultResponse<ResponseType>>;
 }
 
 declare namespace Entities {
@@ -121,10 +133,10 @@ declare namespace Entities {
 
   type MaintenanceLine<Relations = true> = {
     created: string;
-    id: number;
+    id: number | string;
     modified: string;
     name: string;
-    category_id: number;
+    categorie_id: number;
     maintenance_id: number;
   };
 
