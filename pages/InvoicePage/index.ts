@@ -150,7 +150,7 @@ export default Vue.extend({
     );
 
     getInvoices(1, undefined, this.processedFilter).then(
-      response => response.pagination.count
+      response => (this.processed = response.pagination.count)
     );
   }
 });
