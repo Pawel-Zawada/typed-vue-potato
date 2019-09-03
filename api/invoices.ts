@@ -8,17 +8,28 @@ const getVariables =
 export const getInvoices: API.GetDataFunction<
   Entities.Invoice[],
   true
-> = async (page?: number, sort?: DataTable.SortParameter[]) => {
-  const sortingString = '';
+> = async (page, sort?: DataTable.SortParameter[], filters?) => {
+  let sortingString = '';
+  let filterString = '';
+
+  // TODO: process this into the url.
   if (sort) {
-    sort.map(
-      ({ property, direction }) => `&sort=${property}&direction=${direction}`
-    );
+    sortingString = sort
+      .map(
+        ({ property, direction }) => `&sort=${property}&direction=${direction}`
+      )
+      .join();
+  }
+  if (filters) {
+    filterString = filters
+      .map(({ column, table, value }) => `&${table}@${column}=${value}`)
+      .join();
   }
   const response: {
     data: API.DefaultResponse<Entities.Invoice[], true>;
   } = await axios.get(
-    `${baseurl}?${getVariables}${sortingString}${page && `&page=${page}`}`
+    `${baseurl}?${getVariables}${sortingString}${filterString}${page &&
+      `&page=${page}`}`
   );
   return response.data;
 };

@@ -8,7 +8,8 @@ interface DataInterface {
   pageCount: number;
   /** Item count of each page */
   pageSize: number;
-  sortParams: { property: string; direction: string }[];
+  sortParams: DataTable.SortParameter[];
+  filters: API.Filter[];
   loading: boolean;
 }
 
@@ -35,6 +36,7 @@ export default Vue.extend({
       pageCount: 1,
       pageSize: 1,
       sortParams: [],
+      filters: [],
       loading: false
     };
   },
@@ -47,10 +49,14 @@ export default Vue.extend({
     }
   },
   methods: {
-    async getTableData(page: number): Promise<void> {
+    async getTableData(page?: number, filters?: API.Filter[]): Promise<void> {
       this.loading = true;
       try {
-        const response = await this.getData(page || this.page, this.sortParams);
+        const response = await this.getData(
+          page || this.page,
+          this.sortParams,
+          filters || this.filters
+        );
 
         this.total = response.pagination.count;
         this.page = response.pagination.page;

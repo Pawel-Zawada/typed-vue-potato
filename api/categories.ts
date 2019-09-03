@@ -6,11 +6,13 @@ export const getCategories: API.GetDataFunction<
   Entities.Categories[],
   true
 > = async (page?: number, sort?: DataTable.SortParameter[]) => {
-  const sortingString = '';
+  let sortingString = '';
   if (sort) {
-    sort.map(
-      ({ property, direction }) => `&sort=${property}&direction=${direction}`
-    );
+    sortingString = sort
+      .map(
+        ({ property, direction }) => `&sort=${property}&direction=${direction}`
+      )
+      .join();
   }
   const response: {
     data: API.DefaultResponse<Entities.Categories[], true>;

@@ -40,6 +40,16 @@ declare namespace DataTable {
 
 declare namespace API {
   /**
+   * Filter used to search data by property values.
+   * Example: `?TableNames@column=value`
+   */
+  type Filter = {
+    table: string;
+    column: string;
+    value: string;
+  };
+
+  /**
    * @param DataType Typeset of the retrieved data from the API. Example: `Invoice[]`.
    * @param Paginated Boolean value whether the response will hold the `pagination` object.
    */
@@ -68,7 +78,8 @@ declare namespace API {
    */
   type GetDataFunction<ResponseType = any, Paginated = false> = (
     page?: number,
-    sort?: DataTable.SortParameter[]
+    sort?: DataTable.SortParameter[],
+    filters?: API.Filter[]
   ) => Promise<DefaultResponse<ResponseType, Paginated>>;
 
   /**

@@ -30,9 +30,4 @@
   </div>
 </template>
 
-<script src="./index.ts" lang="ts">
-</script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
+<script src="./index.ts" lang="ts" />

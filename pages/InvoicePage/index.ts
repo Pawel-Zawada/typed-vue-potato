@@ -8,10 +8,18 @@ import {
 import downloadBlob from '../../helpers/downloadBlob';
 
 import DataTable from '../../components/DataTable/index.vue';
-import { updateMaintenance } from '../../api/maintenances';
 
 interface DataInterface {
   invoices: Entities.Invoice[];
+  pending: number;
+  pendingFilter: API.Filter[] &
+    [{ table: 'Invoices'; column: 'status'; value: 'pending' }];
+  hold: number;
+  holdFilter: API.Filter[] &
+    [{ table: 'Invoices'; column: 'status'; value: 'hold' }];
+  processed: number;
+  processedFilter: API.Filter[] &
+    [{ table: 'Invoices'; column: 'status'; value: 'processed' }];
   search: string;
   editing: number[];
   deleting: number[];
@@ -35,6 +43,16 @@ export default Vue.extend({
   data(): DataInterface {
     return {
       invoices: [],
+      pending: 0,
+      pendingFilter: [
+        { table: 'Invoices', column: 'status', value: 'pending' }
+      ],
+      hold: 0,
+      holdFilter: [{ table: 'Invoices', column: 'status', value: 'hold' }],
+      processed: 0,
+      processedFilter: [
+        { table: 'Invoices', column: 'status', value: 'processed' }
+      ],
       search: '',
       editing: [],
       deleting: [],
@@ -77,8 +95,12 @@ export default Vue.extend({
     };
   },
   methods: {
-    async getInvoices(page: number, sort: DataTable.SortParameter[]) {
-      const response = await getInvoices(page, sort);
+    async getInvoices(
+      page: number,
+      sort?: DataTable.SortParameter[],
+      filters?: API.Filter[]
+    ) {
+      const response = await getInvoices(page, sort, filters);
 
       this.invoices = response.data;
 
@@ -117,5 +139,18 @@ export default Vue.extend({
       const index = this.downloading.findIndex(id => id === invoice.id);
       this.downloading.splice(index, 1);
     }
+  },
+  created() {
+    getInvoices(1, undefined, this.pendingFilter).then(
+      response => (this.pending = response.pagination.count)
+    );
+
+    getInvoices(1, undefined, this.holdFilter).then(
+      response => (this.hold = response.pagination.count)
+    );
+
+    getInvoices(1, undefined, this.processedFilter).then(
+      response => response.pagination.count
+    );
   }
 });
