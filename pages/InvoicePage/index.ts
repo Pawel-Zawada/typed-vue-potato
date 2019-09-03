@@ -104,6 +104,18 @@ export default Vue.extend({
 
       this.invoices = response.data;
 
+      getInvoices(1, undefined, this.pendingFilter).then(
+        response => (this.pending = response.pagination.count)
+      );
+
+      getInvoices(1, undefined, this.holdFilter).then(
+        response => (this.hold = response.pagination.count)
+      );
+
+      getInvoices(1, undefined, this.processedFilter).then(
+        response => (this.processed = response.pagination.count)
+      );
+
       return response;
     },
     getTagType(status: StatusString) {
@@ -139,18 +151,5 @@ export default Vue.extend({
       const index = this.downloading.findIndex(id => id === invoice.id);
       this.downloading.splice(index, 1);
     }
-  },
-  created() {
-    getInvoices(1, undefined, this.pendingFilter).then(
-      response => (this.pending = response.pagination.count)
-    );
-
-    getInvoices(1, undefined, this.holdFilter).then(
-      response => (this.hold = response.pagination.count)
-    );
-
-    getInvoices(1, undefined, this.processedFilter).then(
-      response => (this.processed = response.pagination.count)
-    );
   }
 });
