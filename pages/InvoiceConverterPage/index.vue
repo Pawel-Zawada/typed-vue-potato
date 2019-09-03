@@ -60,7 +60,9 @@
       </el-col>
 
       <el-col :span="24">
-        <el-button @click="() => { resetForm()}">Cancel</el-button>
+        <router-link to="/invoices">
+          <el-button>Cancel</el-button>
+        </router-link>
         <el-button type="primary" @click="submitForm">Confirm</el-button>
       </el-col>
     </el-form>

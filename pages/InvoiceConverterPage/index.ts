@@ -83,6 +83,8 @@ export default Vue.extend({
       for (const maintenanceId of this.maintenanceToRemove) {
         await removeMaintenanceLines(maintenanceId);
       }
+
+      this.$router.push('/invoices');
     },
     addMaintenanceLine() {
       if (this.invoice) {
