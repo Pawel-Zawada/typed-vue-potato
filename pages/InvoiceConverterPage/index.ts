@@ -1,6 +1,10 @@
 import Vue from 'vue';
 
-import { getInvoice, updateInvoice } from '../../api/invoices';
+import {
+  getInvoice,
+  updateInvoice,
+  getInvoiceDocument
+} from '../../api/invoices';
 import { getCategories } from '../../api/categories';
 import MaintenanceLine from './MaintenanceLine.vue';
 import {
@@ -10,6 +14,7 @@ import {
   updateMaintenanceLines
 } from '../../api/maintenanceLines';
 import { updateMaintenance } from '../../api/maintenances';
+import downloadBlob from '../../helpers/downloadBlob';
 
 interface DataInterface {
   invoice?: Entities.Invoice;
@@ -117,6 +122,10 @@ export default Vue.extend({
       if (day.length < 2) day = '0' + day;
 
       return [year, month, day].join('-');
+    },
+    async downloadFile(invoice: Entities.Invoice) {
+      const file = await getInvoiceDocument(invoice.id);
+      downloadBlob(file, invoice.file_name);
     }
   },
   async created() {

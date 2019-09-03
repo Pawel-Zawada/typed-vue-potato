@@ -10,11 +10,16 @@
         </el-col>
       </el-row>
 
-      <div v-if="invoice">
-        <div class="monospace">{{invoice.maintenance.vehicle.license_plate}}</div>
+      <div v-if="invoice" class="title">
+        <div class="license-plate">
+          <b>License plate:</b>
+          <div class="monospace">{{invoice.maintenance.vehicle.license_plate}}</div>
+        </div>
         <b>{{invoice.maintenance.vehicle.user.email}}</b>
         on
         <b>{{formatDate(invoice.created)}}</b>
+        <el-divider direction="vertical"></el-divider>
+        <el-button @click="downloadFile(invoice)" type="text">Download invoice</el-button>
       </div>
     </el-main>
     <el-form class="form" ref="invoiceForm" :model="invoice" label-width="120px" v-if="invoice">
@@ -87,13 +92,31 @@
 <style lang="scss" scoped>
 .main {
   padding-top: 0;
+  padding-bottom: 0;
 }
-.monospace {
-  font-family: monospace;
-  font-size: 24px;
+.title {
   margin-top: 16px;
-  margin-bottom: 16px;
 }
+.license-plate {
+  & {
+    font-size: 24px;
+  }
+  .monospace {
+    & {
+      font-family: monospace;
+      margin-top: 16px;
+      margin-bottom: 16px;
+      margin-left: 8px;
+      display: inline-block;
+      letter-spacing: 5px;
+      background-color: #ecb604;
+      padding: 5px;
+      border-radius: 8px;
+      border: 2px solid black;
+    }
+  }
+}
+
 .form {
   margin-top: 32px;
 }
