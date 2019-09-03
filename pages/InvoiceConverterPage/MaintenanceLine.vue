@@ -1,10 +1,7 @@
 <template>
-  <el-card class="box-card">
-    <el-col :span="6">
-      <div class="grid-content bg-purple"></div>
-    </el-col>
-    <el-col :span="6">
-      <el-select v-model="maintenanceLine.categorie_id" placeholder="Status">
+  <el-row type="flex" class="row">
+    <el-card>
+      <el-select class="select" v-model="maintenanceLine.categorie_id" placeholder="Status">
         <el-option
           v-for="category in categories"
           :key="category.id"
@@ -12,30 +9,23 @@
           :value="category.id"
         ></el-option>
       </el-select>
-    </el-col>
-    <el-col :span="6">
-      <el-button
-        @click="$emit('remove', maintenanceLine)"
-        size="mini"
-        type="danger">Remove
-      </el-button>
-    </el-col>
-    <el-col :span="6">
-      <div class="grid-content bg-purple"></div>
-    </el-col>
-  </el-card>
+    </el-card>
+    <el-button @click="$emit('remove', maintenanceLine)" size="mini" type="danger">Remove</el-button>
+  </el-row>
 </template>
 
 <script>
 export default {
   name: "MaintenanceLine",
-  props: ['maintenanceLine', 'categories']
-}
+  props: ["maintenanceLine", "categories"]
+};
 </script>
 
 <style lang="scss" scoped>
-.box-card {
+.select {
+  width: 100%;
+}
+.row {
   margin-bottom: 20px;
-  padding: 10px;
 }
 </style>
