@@ -3,6 +3,10 @@
     <el-header>
       <el-row>
         <el-page-header class="page-header" @back="$router.back()" content="Invoices overview"></el-page-header>
+      </el-row>
+    </el-header>
+    <el-main>
+      <el-row class="buttons">
         <el-button @click="$refs.table.getTableData()">Refresh</el-button>
 
         <el-button
@@ -34,8 +38,6 @@
           >Processed</el-button>
         </el-badge>
       </el-row>
-    </el-header>
-    <el-main>
       <data-table :get-data="getInvoices" :data="invoices" ref="table" :columns="columns">
         <div slot="status" slot-scope="{row}">
           <el-tag :type="getTagType(row.status)" close-transition>{{row.status}}</el-tag>
@@ -76,5 +78,8 @@
 }
 .filter-button {
   margin-right: 8px;
+}
+.buttons {
+  margin-bottom: 16px;
 }
 </style>

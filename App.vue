@@ -4,7 +4,7 @@
 
 <style lang="scss">
 body {
-  background-color: #fafafa;
+  background-color: rgb(242, 246, 252);
 }
 .container {
   height: 100%;

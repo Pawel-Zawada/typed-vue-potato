@@ -7,15 +7,27 @@
     </el-row>
     <el-row :gutter="16" type="flex" justify="center">
       <el-col class="card-col">
-        <el-card shadow="hover" :body-style="{ padding: '0px' }">
-          <div class="header" slot="header">
-            <h4>Factuurverwerker</h4>
-          </div>
-          <i class="el-icon-document"></i>
-          <div class="bottom">
-            <el-button @click="$router.push('/invoices')">Openen</el-button>
-          </div>
-        </el-card>
+        <router-link to="/invoices">
+          <el-card shadow="hover" :body-style="{ padding: '0px' }">
+            <div class="header" slot="header">
+              <h4>Facturen & onderhoud</h4>
+            </div>
+            <i class="el-icon-document"></i>
+          </el-card>
+        </router-link>
+      </el-col>
+      <el-col class="card-col">
+        <router-link to="/vehicles">
+          <el-card shadow="hover" :body-style="{ padding: '0px' }">
+            <div class="header" slot="header">
+              <h4>
+                Voertuig gegevens &
+                eigenaren
+              </h4>
+            </div>
+            <i class="el-icon-truck"></i>
+          </el-card>
+        </router-link>
       </el-col>
     </el-row>
   </el-main>
