@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-main class="main">
+    <el-header>
       <el-row type="flex" align="middle">
         <el-col :span="4">
           <el-page-header @back="$router.back()" content="Maintenance data"></el-page-header>
@@ -9,7 +9,8 @@
           <el-button type="primary" @click="submitForm">Save</el-button>
         </el-col>
       </el-row>
-
+    </el-header>
+    <el-main class="main">
       <div v-if="invoice" class="title">
         <div class="license-plate">
           <b>License plate:</b>
@@ -20,6 +21,7 @@
         <b>{{formatDate(invoice.created)}}</b>
         <el-divider direction="vertical"></el-divider>
         <el-button @click="downloadFile(invoice)" type="text">Download invoice</el-button>
+        <p class="invoice-filename">({{invoice.file_name}})</p>
       </div>
     </el-main>
     <el-form class="form" ref="invoiceForm" :model="invoice" label-width="120px" v-if="invoice">
@@ -122,6 +124,11 @@
 }
 .maintenance-lines-header {
   margin-top: 0;
+}
+.invoice-filename {
+  font-size: 12px;
+  display: inline-block;
+  color: #666;
 }
 </style>
 

@@ -1,7 +1,8 @@
 <template>
   <div>
-    <el-header class="header">
+    <el-header>
       <el-row>
+        <el-page-header class="page-header" @back="$router.back()" content="Invoices overview"></el-page-header>
         <el-button @click="$refs.table.getTableData()">Refresh</el-button>
 
         <el-button
@@ -70,12 +71,10 @@
   height: 100%;
 }
 
-.header {
-  & {
-    margin-top: 12px;
-  }
-  .filter-button {
-    margin-right: 8px;
-  }
+.page-header {
+  margin-bottom: 16px;
+}
+.filter-button {
+  margin-right: 8px;
 }
 </style>

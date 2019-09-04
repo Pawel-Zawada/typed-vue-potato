@@ -21,15 +21,9 @@ interface DataInterface {
   processedFilter: API.Filter[] &
     [{ table: 'Invoices'; column: 'status'; value: 'processed' }];
   search: string;
-  editing: number[];
   deleting: number[];
   downloading: number[];
   columns: DataTable.Column[];
-  dialog: {
-    open: boolean;
-    data?: Entities.Invoice;
-  };
-  form: Partial<Entities.Maintenance<false>>;
   $refs?: {
     invoiceForm: Vue & Element.Form;
     table: any;
@@ -54,7 +48,6 @@ export default Vue.extend({
         { table: 'Invoices', column: 'status', value: 'processed' }
       ],
       search: '',
-      editing: [],
       deleting: [],
       downloading: [],
       columns: [
@@ -81,17 +74,16 @@ export default Vue.extend({
           label: 'Created at'
         },
         {
+          prop: 'file_name',
+          getProp: (row: Entities.Invoice): string => row.file_name,
+          label: 'Filename'
+        },
+        {
           fixed: 'right',
           label: 'Operations',
           minWidth: '100'
         }
-      ],
-
-      form: {},
-      dialog: {
-        open: false,
-        data: undefined
-      }
+      ]
     };
   },
   methods: {
