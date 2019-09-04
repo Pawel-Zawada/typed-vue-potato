@@ -18,9 +18,9 @@ declare namespace DataTable {
   /**
    * @property {function} getProp Passes the row data so you can retrieve any containing value that you need, and return it for the template to render.
    */
-  type Column = {
+  type Column<RowType = any> = {
     prop?: string;
-    getProp?: (row: any) => string | number;
+    getProp?: (row: RowType) => string | number;
     label?: string;
     width?: string;
     minWidth?: string;
@@ -156,7 +156,7 @@ declare namespace Entities {
     color: string;
     construction_year: string;
     created: string;
-    fuel_declare: string;
+    fuel_type: string;
     id: number;
     license_plate: string;
     model: string;

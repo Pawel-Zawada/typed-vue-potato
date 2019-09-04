@@ -14,7 +14,7 @@
       <div v-if="invoice" class="title">
         <div class="license-plate">
           <b>License plate:</b>
-          <div class="monospace">{{invoice.maintenance.vehicle.license_plate}}</div>
+          <div class="license-plate">{{invoice.maintenance.vehicle.license_plate}}</div>
         </div>
         <b>{{invoice.maintenance.vehicle.user.email}}</b>
         on
@@ -102,20 +102,6 @@
 .license-plate {
   & {
     font-size: 24px;
-  }
-  .monospace {
-    & {
-      font-family: monospace;
-      margin-top: 16px;
-      margin-bottom: 16px;
-      margin-left: 8px;
-      display: inline-block;
-      letter-spacing: 5px;
-      background-color: #ecb604;
-      padding: 5px;
-      border-radius: 8px;
-      border: 2px solid black;
-    }
   }
 }
 

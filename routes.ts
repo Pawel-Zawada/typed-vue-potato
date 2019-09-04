@@ -17,7 +17,7 @@ export default [
   {
     path: '/invoices/:id',
     component: InvoiceConverterPage,
-    name: 'Invoices'
+    name: 'Invoicew'
   },
   {
     path: '/vehicles',

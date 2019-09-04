@@ -6,7 +6,10 @@
       </el-row>
     </el-header>
     <el-main>
-      <h1>Vehicles</h1>
+      <data-table :get-data="getVehicles" :data="vehicles" ref="table" :columns="columns">
+        <div slot="license_plate" class="license-plate" slot-scope="{row}">{{row.license_plate}}</div>
+        <div slot="vin" class="monospace" slot-scope="{row}">{{row.vin}}</div>
+      </data-table>
     </el-main>
   </div>
 </template>
